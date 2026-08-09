@@ -6,7 +6,7 @@ const path = require("path");
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(express.static("public")); // tumhara public folder
+app.use(express.static(__dirname)); // root folder ko serve karega
 // YE 2 LINE ADD KARO - iframe ke liye
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -25,7 +25,7 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 });
 
 // Frontend serve
-app.get("*", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
