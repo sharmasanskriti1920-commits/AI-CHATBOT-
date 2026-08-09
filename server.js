@@ -7,6 +7,11 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(express.static("public")); // tumhara public folder
+// YE 2 LINE ADD KARO - iframe ke liye
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
