@@ -1,4 +1,3 @@
-
 import express from "express";
 import cors from "cors";
 import path from "path";
@@ -12,9 +11,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname)); // Yaha public hata diya
+app.use(express.static(__dirname));
 
-// Yaha bhi public hata diya
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
@@ -24,7 +22,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 app.post("/api/chat", async (req, res) => {
   try {
     const { message } = req.body;
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // YAHI CHANGE HAI
     const result = await model.generateContent(message);
     const response = await result.response;
     const text = response.text();
