@@ -1,3 +1,4 @@
+
 import express from "express";
 import cors from "cors";
 import path from "path";
@@ -11,11 +12,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public"))); // YE LINE IMPORTANT
+app.use(express.static(__dirname)); // Yaha public hata diya
 
-// YE 2 LINE NAYI ADD KI HAIN
+// Yaha bhi public hata diya
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
