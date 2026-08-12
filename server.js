@@ -1,21 +1,16 @@
-const express = require("express");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const dotenv = require("dotenv");
-const path = require("path");
-
+import express from "express";
+import cors from "cors";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import dotenv from "dotenv";
 dotenv.config();
+
 const app = express();
+app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname)); // root folder ko serve karega
-// YE 2 LINE ADD KARO - iframe ke liye
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  next();
-});
+app.use(express.static("public"));
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// API route for chatbot
 app.post("/api/chat", async (req, res) => {
   try {
     const { message } = req.body;
@@ -25,15 +20,10 @@ app.post("/api/chat", async (req, res) => {
     const text = response.text();
     res.json({ reply: text });
   } catch (error) {
-    console.error("Gemini Error:", error); // YE LINE IMPORTANT HAI
+    console.error("GEMINI ERROR:", error.message);
     res.status(500).json({ reply: "Server Error: " + error.message });
   }
 });
 
-// Frontend serve
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
-
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));
