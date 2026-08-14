@@ -2,8 +2,9 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";  // YE NAYA PACKAGE HAI
 import dotenv from "dotenv";
+
 dotenv.config();
 
 const app = express();
@@ -17,19 +18,23 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// YEHI NAYA TARIQA HAI
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+// YEHI NAYA TARIQA HAI - v1 API
+const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 app.post("/api/chat", async (req, res) => {
   try {
     const { message } = req.body;
-    const result = await model.generateContent(message);
-    const response = await result.response;
-    const text = response.text();
+
+    const result = await genAI.models.generateContent({
+      model: "gemini-1.5-flash",  // seedha model ka naam
+      contents: message,
+    });
+
+    const text = result.text;
     res.json({ reply: text });
+
   } catch (error) {
-    console.error(error);
+    console.error("Gemini Error:", error);
     res.status(500).json({ error: error.message });
   }
 });
