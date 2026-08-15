@@ -26,11 +26,15 @@ app.post("/api/chat", async (req, res) => {
     const { message } = req.body;
 
     const result = await genAI.models.generateContent({
-      model: "gemini-1.5-flash",  // seedha model ka naam
-      contents: message,
+      model: "gemini-1.5-flash",  // seedha yehi naam
+      contents: [  // <-- ARRAY BANA DE
+        {
+          role: "user",
+          parts: [{ text: message }]
+        }
+      ]
     });
-
-    const text = result.text;
+ const text = result.text;
     res.json({ reply: text });
 
   } catch (error) {
@@ -38,6 +42,5 @@ app.post("/api/chat", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));
