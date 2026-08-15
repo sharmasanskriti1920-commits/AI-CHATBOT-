@@ -24,9 +24,8 @@ const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 app.post("/api/chat", async (req, res) => {
   try {
     const { message } = req.body;
-
-    const result = await genAI.models.generateContent({
-      model: "gemini-1.5-flash",  // seedha yehi naam
+ const result = await genAI.models.generateContent({
+      model: "gemini-2.0-flash",  // seedha yehi naam
       contents: [  // <-- ARRAY BANA DE
         {
           role: "user",
