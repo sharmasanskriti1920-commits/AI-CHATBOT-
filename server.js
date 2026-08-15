@@ -20,19 +20,16 @@ app.get("/", (req, res) => {
 
 // YEHI NAYA TARIQA HAI - v1 API
 const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
 app.post("/api/chat", async (req, res) => {
   try {
     const { message } = req.body;
  const result = await genAI.models.generateContent({
-      model: "gemini-2.0-flash",  // seedha yehi naam
-      contents: [  // <-- ARRAY BANA DE
-        {
-          role: "user",
-          parts: [{ text: message }]
-        }
-      ]
-    });
+  model: "gemini-2.5-flash",  // <-- YE NAYA WALA
+  contents: [{
+    role: "user", 
+    parts: [{ text: message }]
+  }]
+});
  const text = result.text;
     res.json({ reply: text });
 
